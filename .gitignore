@@ -3,7 +3,7 @@ dist/
 
 # generated types
 .astro/
-
+src/pages/posts/*.md
 # dependencies
 node_modules/
 

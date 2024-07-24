@@ -1,0 +1,57 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import PostCard from "../../../components/PostCard.astro";
+type Posts = {
+  frontmatter: {
+    tags: string[];
+    title: string;
+    description: string;
+    pubDate: string;
+  };
+  url: string;
+  Content: any;
+}[];
+
+export async function getStaticPaths() {
+  let posts = (await Astro.glob("../../../pages/posts/*.md")) as Posts;
+  let tags = posts.flatMap((post) => post.frontmatter.tags);
+  tags = [...new Set(tags)];
+  console.log(tags);
+
+  return tags.map((tag: string) => ({
+    params: { tag },
+    props: {
+      posts: posts
+        .filter((post) => post.frontmatter.tags.includes(tag))
+        .sort((a, b) => {
+          return (
+            new Date(b.frontmatter.pubDate).getTime() -
+            new Date(a.frontmatter.pubDate).getTime()
+          );
+        }),
+    },
+  }));
+}
+
+const { tag } = Astro.params;
+const { posts } = Astro.props;
+---
+
+<Layout pageTitle="/blog">
+  <main class="container mx-auto px-6 py-12">
+    <p>{tag}のタグが付いた記事</p>
+    <div class="space-y-8">
+      {
+        posts.map((post) => (
+          <PostCard
+            title={post.frontmatter.title}
+            description={post.frontmatter.description}
+            url={post.url}
+            date={post.frontmatter.pubDate}
+            tags={post.frontmatter.tags}
+          />
+        ))
+      }
+    </div>
+  </main>
+</Layout>

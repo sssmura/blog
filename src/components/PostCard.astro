@@ -1,0 +1,43 @@
+---
+type PostCardProps = {
+  title: string;
+  description: string;
+  url: string;
+  date: string;
+  tags: string[];
+};
+const { title, description, url, date, tags } = Astro.props as PostCardProps;
+console.log(date);
+---
+
+<div
+  class="bg-[#161b22] border border-[#30363d] rounded-lg p-6 transition-transform hover:-translate-y-1 hover:shadow-lg"
+>
+  <h4 class="text-xl font-semibold mb-3 text-[#58a6ff]">
+    {title}
+  </h4>
+  <div class="flex flex-wrap gap-2 mb-3">
+    {
+      tags.map((tag) => (
+        <a
+          href={`/blog/tags/${tag}`}
+          class="bg-[#21262d] text-[#8b949e] text-xs px-2 py-1 rounded-full hover:bg-[#30363d] transition-colors duration-200 ease-in-out"
+        >
+          {tag}
+        </a>
+      ))
+    }
+  </div>
+  <time datetime={date} class="text-[#8b949e] text-sm mb-2 block">
+    {date}
+  </time>
+  <p class="text-[#8b949e] mb-4">
+    {description}
+  </p>
+  <a
+    href={url}
+    class="text-[#58a6ff] font-semibold hover:underline flex items-center gap-2"
+  >
+    続きを読む <i data-feather="arrow-right" class="w-4 h-4"></i>
+  </a>
+</div>

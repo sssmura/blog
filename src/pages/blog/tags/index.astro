@@ -1,0 +1,23 @@
+---
+import fi from "feather-icons";
+import PostCard from "../../../components/PostCard.astro";
+import Layout from "../../../layouts/Layout.astro";
+const posts = await Astro.glob("../../../pages/posts/*.md");
+let tags = posts.flatMap((post) => post.frontmatter.tags);
+tags = [...new Set(tags)];
+---
+
+<Layout location="/blog">
+  <main class="container mx-auto px-6 py-12">
+    <h2>tags</h2>
+    <ul>
+      {
+        tags.map((tag) => (
+          <li>
+            <a href={`/blog/tags/${encodeURIComponent(tag)}`}>{tag}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </main>
+</Layout>
